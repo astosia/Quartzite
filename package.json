@@ -1,0 +1,184 @@
+{
+    "author": "astosia",
+    "dependencies": {
+        "pebble-clay": "^1.0.4",
+        "pebble-fctx": "^1.5.0",
+        "pebble-fctx-compiler": "^1.2.2"
+    },
+    "keywords": [],
+    "name": "Quartzite",
+    "pebble": {
+        "capabilities": [
+            "location",
+            "configurable",
+            "health"
+        ],
+        "displayName": "Quartzite",
+        "enableMultiJS": true,
+        "messageKeys": [
+            "Back1Color",
+            "Back1ColorN",
+            "Back2Color",
+            "Back2ColorN",
+            "FrameColor2",
+            "FrameColor2N",
+            "FrameColor",
+            "FrameColorN",
+            "Text1Color",
+            "Text1ColorN",
+            "Text2Color",
+            "Text2ColorN",
+            "FrameColor",
+            "FrameColorN",
+            "WeatherCond",
+            "WeatherTemp",
+            "HourSunrise",
+            "HourSunset",
+            "NameLocation",
+            "UpSlider",
+            "NightTheme",
+            "APIKEY_User",
+            "WeatherUnit",
+            "WeatherProv",
+            "EmailPMKEY",
+            "PINPMKEY",
+            "HourColor",
+            "HourColorN",
+            "MinColor",
+            "MinColorN",
+            "WeatherWind",
+            "bluetoothvibe",
+            "WEATHER_SUNSET_KEY",
+            "Text3Color",
+            "Text3ColorN",
+            "Text7Color",
+            "Text7ColorN",
+            "Text8Color",
+            "Text8ColorN",
+            "Text9Color",
+            "Text9ColorN",
+            "Text10Color",
+            "Text10ColorN",
+            "IconNow",
+            "IconFore",
+            "TempFore",
+            "WindFore",
+            "TempForeLow",
+            "Text4Color",
+            "Text4ColorN",
+            "WindIconNow",
+            "WindIconAve",
+            "Text5Color",
+            "Text5ColorN",
+            "WindUnit",
+            "RightLeft",
+            "Rotate",
+            "MoonPhase",
+            "WEATHER_SUNRISE_KEY",
+            "FontChoice",
+            "FrameColor1",
+            "FrameColor2",
+            "FrameColor1N",
+            "FrameColor2N",
+            "Text6Color",
+            "Text6ColorN"
+        ],
+        "projectType": "native",
+        "resources": {
+            "media": [
+                {
+                    "file": "fonts/Dripicons",
+                    "name": "FONT_DRIPICONS_16",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/Weathericons",
+                    "name": "FONT_WEATHERICONS_22",
+                    "targetPlatforms": [
+                        "chalk"
+                    ],
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/Weathericons",
+                    "name": "FONT_WEATHERICONS_16",
+                    "targetPlatforms": [
+                        "chalk"
+                    ],
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/Weathericons",
+                    "name": "FONT_WEATHERICONS_18",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/Weathericons",
+                    "name": "FONT_WEATHERICONS_26",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/Weathericons",
+                    "name": "FONT_WEATHERICONS_30",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/Weathericons",
+                    "name": "FONT_WEATHERICONS_32",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "data/SteelfishRg-Regular.ffont",
+                    "name": "FONT_STEELFISHRG",
+                    "targetPlatforms": null,
+                    "type": "raw"
+                },
+                {
+                    "file": "data/OpenDyslexic-Cond.ffont",
+                    "name": "FONT_ZEP",
+                    "targetPlatforms": [
+                        "basalt",
+                        "chalk",
+                        "diorite"
+                    ],
+                    "type": "raw"
+                },
+                {
+                    "file": "data/Copse-Cond.ffont",
+                    "name": "FONT_COPSE",
+                    "targetPlatforms": [
+                        "basalt",
+                        "chalk",
+                        "diorite"
+                    ],
+                    "type": "raw"
+                }
+            ]
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "chalk",
+            "diorite"
+        ],
+        "uuid": "915aaf14-6755-4fac-8025-b3b5321bec46",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "1.7.0"
+}
