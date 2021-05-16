@@ -679,9 +679,20 @@ var xhrRequest = function (url, type, callback) {
 
 function suncalcinfo (pos){
     //suncalc stuff
-  var lat=pos.coords.latitude;
-  var lon= pos.coords.longitude;
+
   var settings = JSON.parse(localStorage.getItem('clay-settings')) || {};
+  var manuallat = settings.Lat;
+  var manuallong = settings.Long;
+  if(manuallat !== null && manuallat !== '' && manuallong !== null && manuallong !== '' ){
+    var lat= manuallat;
+    var lon= manuallong;
+  }
+  else {
+    var lat=pos.coords.latitude;
+    var lon= pos.coords.longitude;
+  }
+  //var lat=pos.coords.latitude;
+  //var lon= pos.coords.longitude;
         var d = new Date();
         var sunTimes = SunCalc.getTimes(d, lat, lon);
         var sunsetStrhr = ('0'+sunTimes.sunset.getHours()).substr(-2);
@@ -690,8 +701,23 @@ function suncalcinfo (pos){
         var sunriseStrhr = ('0'+sunTimes.sunrise.getHours()).substr(-2);
         var sunriseStrmin = ('0'+sunTimes.sunrise.getMinutes()).substr(-2);
         var sunriseStr = String(sunriseStrhr + ":" + sunriseStrmin);
-       var moonmetrics = SunCalc.getMoonIllumination(d);
-     var moonphase = Math.round(moonmetrics.phase*28);
+        var sunsetStrhr12 = parseInt(sunTimes.sunset.getHours());
+        var sunriseStrhr12 = parseInt(sunTimes.sunrise.getHours());
+        if(sunsetStrhr12 > 12 ){
+          var sunsetStr12h = String (sunsetStrhr12 - 12 + ":" + sunsetStrmin +"pm");
+          }
+        else{
+          var sunsetStr12h = String (sunsetStrhr12  + ":" + sunsetStrmin + "am");
+          }
+        if(sunriseStrhr > 12 ){
+          var sunriseStr12h = String(sunriseStrhr12 - 12 + ":" + sunriseStrmin +"pm");
+          }
+        else{
+          var sunriseStr12h = String(sunriseStrhr12  + ":" + sunriseStrmin + "am");
+          }
+
+        var moonmetrics = SunCalc.getMoonIllumination(d);
+        var moonphase = Math.round(moonmetrics.phase*28);
    localStorage.setItem("OKAPI", 1);
     console.log("OK API");
     console.log(moonphase);
@@ -703,6 +729,8 @@ function suncalcinfo (pos){
     var dictionary = {
       "WEATHER_SUNSET_KEY":sunsetStr,
       "WEATHER_SUNRISE_KEY":sunriseStr,
+      "WEATHER_SUNSET_KEY_12H":sunsetStr12h,
+      "WEATHER_SUNRISE_KEY_12H":sunriseStr12h,
       "MoonPhase": moonphase,
     };
     // Send to Pebble
@@ -714,9 +742,19 @@ function suncalcinfo (pos){
 // Request for DarkSky
 function locationSuccessDS(pos){
   //Request DarkSky
-  var lat=pos.coords.latitude;
-  var lon= pos.coords.longitude;
+//  var lat=pos.coords.latitude;
+//  var lon= pos.coords.longitude;
   var settings2 = JSON.parse(localStorage.getItem('clay-settings')) || {};
+  var manuallat = settings2.Lat;
+  var manuallong = settings2.Long;
+  if(manuallat != null && manuallat != '' && manuallong != null && manuallong != '' ){
+    var lat= manuallat;
+    var lon= manuallong;
+  }
+  else {
+    var lat=pos.coords.latitude;
+    var lon= pos.coords.longitude;
+  }
         var d = new Date();
         var sunTimes = SunCalc.getTimes(d, lat, lon);
         var sunsetStrhr = ('0'+sunTimes.sunset.getHours()).substr(-2);
@@ -725,6 +763,20 @@ function locationSuccessDS(pos){
         var sunriseStrhr = ('0'+sunTimes.sunrise.getHours()).substr(-2);
         var sunriseStrmin = ('0'+sunTimes.sunrise.getMinutes()).substr(-2);
         var sunriseStr = String(sunriseStrhr + ":" + sunriseStrmin);
+        var sunsetStrhr12 = parseInt(sunTimes.sunset.getHours());
+        var sunriseStrhr12 = parseInt(sunTimes.sunrise.getHours());
+        if(sunsetStrhr12 > 12 ){
+          var sunsetStr12h = String (sunsetStrhr12 - 12 + ":" + sunsetStrmin +"pm");
+          }
+        else{
+          var sunsetStr12h = String (sunsetStrhr12  + ":" + sunsetStrmin + "am");
+          }
+        if(sunriseStrhr > 12 ){
+          var sunriseStr12h = String(sunriseStrhr12 - 12 + ":" + sunriseStrmin +"pm");
+          }
+        else{
+          var sunriseStr12h = String(sunriseStrhr12  + ":" + sunriseStrmin + "am");
+          }
      var moonmetrics = SunCalc.getMoonIllumination(d);
      var moonphase = Math.round(moonmetrics.phase*28);
   var keyAPIds=localStorage.getItem('dsKey');
@@ -817,6 +869,8 @@ function locationSuccessDS(pos){
       "WeatherWind" : wind,
       "WEATHER_SUNSET_KEY":sunsetStr,
       "WEATHER_SUNRISE_KEY":sunriseStr,
+      "WEATHER_SUNSET_KEY_12H":sunsetStr12h,
+      "WEATHER_SUNRISE_KEY_12H":sunriseStr12h,
       "IconNow":icon_ds,
       "IconFore":forecast_icon_ds,
       "TempFore": highlowds,//hi_low,
@@ -838,9 +892,19 @@ function locationSuccessDS(pos){
 // Request for OWM
 function locationSuccessOWM(pos){
   //Request OWM
-  var lat=pos.coords.latitude;
-  var lon= pos.coords.longitude;
+//  var lat=pos.coords.latitude;
+//  var lon= pos.coords.longitude;
   var settings3 = JSON.parse(localStorage.getItem('clay-settings')) || {};
+  var manuallat = settings3.Lat;
+  var manuallong = settings3.Long;
+  if(manuallat != null && manuallat != '' && manuallong != null && manuallong != '' ){
+    var lat= manuallat;
+    var lon= manuallong;
+  }
+  else {
+    var lat=pos.coords.latitude;
+    var lon= pos.coords.longitude;
+  }
         var d = new Date();
         var sunTimes = SunCalc.getTimes(d, lat, lon);
         var sunsetStrhr = ('0'+sunTimes.sunset.getHours()).substr(-2);
@@ -849,6 +913,20 @@ function locationSuccessOWM(pos){
         var sunriseStrhr = ('0'+sunTimes.sunrise.getHours()).substr(-2);
         var sunriseStrmin = ('0'+sunTimes.sunrise.getMinutes()).substr(-2);
         var sunriseStr = String(sunriseStrhr + ":" + sunriseStrmin);
+        var sunsetStrhr12 = parseInt(sunTimes.sunset.getHours());
+        var sunriseStrhr12 = parseInt(sunTimes.sunrise.getHours());
+        if(sunsetStrhr12 > 12 ){
+          var sunsetStr12h = String (sunsetStrhr12 - 12 + ":" + sunsetStrmin +"pm");
+          }
+        else{
+          var sunsetStr12h = String (sunsetStrhr12  + ":" + sunsetStrmin + "am");
+          }
+        if(sunriseStrhr > 12 ){
+          var sunriseStr12h = String(sunriseStrhr12 - 12 + ":" + sunriseStrmin +"pm");
+          }
+        else{
+          var sunriseStr12h = String(sunriseStrhr12  + ":" + sunriseStrmin + "am");
+          }
      var moonmetrics = SunCalc.getMoonIllumination(d);
      var moonphase = Math.round(moonmetrics.phase*28);
   var keyAPIowm=localStorage.getItem('owmKey');
@@ -949,6 +1027,8 @@ function locationSuccessOWM(pos){
       "WeatherWind" : wind,
       "WEATHER_SUNSET_KEY":sunsetStr,
       "WEATHER_SUNRISE_KEY":sunriseStr,
+      "WEATHER_SUNSET_KEY_12H":sunsetStr12h,
+      "WEATHER_SUNRISE_KEY_12H":sunriseStr12h,
       "IconNow":icon_owm,
       "IconFore":forecast_icon_owm,
       "TempFore": highlowowm,//hi_low,
@@ -987,6 +1067,8 @@ function locationError(err) {
 function getinfo() {
   // Get keys from pmkey
   var settings4 = JSON.parse(localStorage.getItem('clay-settings')) || {};
+  var manuallat = settings4.Lat;
+  var manuallong = settings4.Long;
   var email=settings4.EmailPMKEY;
   var pin=settings4.PINPMKEY;
   if (email !== undefined && pin !== undefined) {

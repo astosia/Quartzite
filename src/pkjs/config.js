@@ -21,18 +21,25 @@ module.exports = [
        "options": [
          {
            "label": "Steelfish",
-           "value": 'steel',
+           "value": "steel",
          },
          {
            "label": "Open Dyslexic",
-           "value": 'opend',
+           "value": "opend",
          },
          {
            "label": "Copse",
-           "value": 'cop',
+           "value": "cop",
          }
        ]
       },
+//      {
+//        "type": "toggle",
+//        "messageKey": "HealthOff",
+//        "label": "Switch off Pebble Health",
+//        "defaultValue": false,
+//        "capabilities":["HEALTH"]
+//      },
       {
         "type": "heading",
         "defaultValue": "Top Section",
@@ -345,6 +352,25 @@ module.exports = [
               }
             ]
           },
+          {
+             "type": "input",
+             "messageKey": "Lat",
+             "defaultValue": "",
+             "label": "Manual Location - Latitude",
+             "attributes": {
+             "placeholder": "eg: 51.4962"
+             }
+           },
+           {
+              "type": "input",
+              "messageKey": "Long",
+              "defaultValue": "",
+              "label": "Manual Location - Longitude",
+              "description": "Leave both blank to use GPS location for sunrise & sunset times and weather. You can use <a href =https://www.google.com/maps>Google Maps</a> or <a href =https://www.openstreetmap.org/>OpenStreetMap</a> to find latitude & logitude.",
+              "attributes": {
+                "placeholder": "eg: -0.0989"
+              }
+            },
          {
             "type": "input",
             "messageKey": "APIKEY_User",
