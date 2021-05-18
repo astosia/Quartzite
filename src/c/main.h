@@ -44,8 +44,24 @@ typedef struct ClaySettings {
   int UpSlider;
   char* WeatherTemp;
   char* TempFore;
-  char FontChoice[40];
+  char FontChoice[12];
+  char moonstring[12];
+  char sunsetstring[10];
+  char sunrisestring[10];
+  char sunsetstring12[10];
+  char sunrisestring12[10];
+  char tempstring[10];
+  char condstring[10];
+  char windstring[10];
+  char windavestring[10];
+  char iconnowstring[6];
+  char iconforestring[6];
+  char windiconnowstring[6];
+  char windiconavestring[6];
+  char templowstring[10];
+  char temphistring[10];
+  int Weathertimecapture;
   bool NightTheme;
-//  bool HealthOff;
+  bool HealthOff;
 
 } __attribute__((__packed__)) ClaySettings;

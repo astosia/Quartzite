@@ -34,11 +34,14 @@
             "WeatherTemp",
             "HourSunrise",
             "HourSunset",
+            "HealthOff",
             "NameLocation",
             "UpSlider",
             "NightTheme",
             "APIKEY_User",
             "WeatherUnit",
+            "Weathertime",
+            "Weathertimecapture",
             "WeatherProv",
             "EmailPMKEY",
             "PINPMKEY",
@@ -92,6 +95,7 @@
             "media": [
                 {
                     "file": "fonts/Dripicons",
+                    "characterRegex": "[z]",
                     "name": "FONT_DRIPICONS_16",
                     "targetPlatforms": null,
                     "type": "font"

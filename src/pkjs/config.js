@@ -17,7 +17,7 @@ module.exports = [
        "messageKey": "FontChoice",
        "defaultValue": 'steel',
        "label": "Time & Date Font",
-       "capabilities":["MICROPHONE"],
+       "capabilities":["HEALTH"],
        "options": [
          {
            "label": "Steelfish",
@@ -33,13 +33,13 @@ module.exports = [
          }
        ]
       },
-//      {
-//        "type": "toggle",
-//        "messageKey": "HealthOff",
-//        "label": "Switch off Pebble Health",
-//        "defaultValue": false,
-//        "capabilities":["HEALTH"]
-//      },
+      {
+        "type": "toggle",
+        "messageKey": "HealthOff",
+        "label": "Switch off Steps",
+        "defaultValue": true,
+        "capabilities":["HEALTH"]
+      },
       {
         "type": "heading",
         "defaultValue": "Top Section",
@@ -366,7 +366,7 @@ module.exports = [
               "messageKey": "Long",
               "defaultValue": "",
               "label": "Manual Location - Longitude",
-              "description": "Leave both blank to use GPS location for sunrise & sunset times and weather. You can use <a href =https://www.google.com/maps>Google Maps</a> or <a href =https://www.openstreetmap.org/>OpenStreetMap</a> to find latitude & logitude.",
+              "description": "Leave both blank to use GPS location for sunrise & sunset times and weather. You can use <a href =https://www.google.com/maps>Google Maps</a> or <a href =https://www.openstreetmap.org/>OpenStreetMap</a> to find latitude & longitude.",
               "attributes": {
                 "placeholder": "eg: -0.0989"
               }

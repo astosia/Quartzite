@@ -14,7 +14,7 @@
 //Static and initial vars
 static GFont
   FontDayOfTheWeekShortName, FontSunset, FontSunset12,FontMoonPhase, FontBTQTIcons, FontTemp, FontTempFore, FontWeatherIcons, FontWeatherCondition, FontWindDirection;
-char
+/*char
   sunsetstring[20],
   sunrisestring[20],
   sunsetstring12[20],
@@ -28,8 +28,8 @@ char
   windiconnowstring[8],
   windiconavestring[8],
   templowstring[20],
-  temphistring[20],
-  moonstring[12];
+  temphistring[20];*///,
+//  moonstring[12];
 //  fontstring[40];
 
 FFont* time_font;
@@ -41,8 +41,8 @@ FFont* time_font_copse;
 static Window * s_window;
 
 static Layer * s_canvas_background;
-static Layer * s_canvas; //weather layer
-static Layer * s_canvas_sunset_icon;
+static Layer * s_canvas_top_section; //weather layer
+static Layer * s_canvas_bottom_section;
 static Layer * s_canvas_bt_icon;
 static Layer * s_canvas_qt_icon;
 //static Layer *s_step_layer;
@@ -50,7 +50,7 @@ Layer * time_area_layer;
 Layer * date_area_layer;
 
 
-static int s_hours, s_minutes, s_weekday, s_day, s_loop, s_countdown;//, s_battery_level;
+static int s_hours, s_minutes, s_weekday, s_day, s_loop;//, s_countdown;//, s_battery_level;
 
 static char* weather_conditions[] = {
     "\U0000F07B", // 'unknown': 0,
@@ -189,7 +189,7 @@ static void prv_default_settings(){
 //  settings.FontChoice = "steel";
   settings.UpSlider = 30;
   settings.NightTheme = false;
-//  settings.HealthOff = false;
+  settings.HealthOff = true;
 }
 int HourSunrise=700;
 int HourSunset=2200;
@@ -198,6 +198,7 @@ bool BTOn=true;
 bool GPSOn=true;
 bool IsNightNow=false;
 bool showForecastWeather = false;
+int s_countdown = 0;
 
 static GColor ColorSelect(GColor ColorDay, GColor ColorNight){
   if (settings.NightTheme && IsNightNow && GPSOn ){
@@ -240,7 +241,7 @@ void request_watchjs(){
 static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
   // A tap event occured
   showForecastWeather = !showForecastWeather;
-  layer_mark_dirty (s_canvas);
+  layer_mark_dirty (s_canvas_top_section);
 }
 
 ///BT Connection
@@ -267,7 +268,7 @@ static void quiet_time_icon () {
 
 static void onreconnection(bool before, bool now){
   if (!before && now){
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "BT reconnected, requesting weather at %d", s_minutes);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "BT reconnected, requesting weather at %d:%d", s_hours,s_minutes);
     request_watchjs();
   }
 }
@@ -280,17 +281,21 @@ static int s_step_count = 0;
 
 // Is step data available?
 
-  bool step_data_is_available() {
-  return HealthServiceAccessibilityMaskAvailable &
-    health_service_metric_accessible(HealthMetricStepCount,
-      time_start_of_today(), time(NULL));
-    }
 
-//if (!settings.HealthOff) {
+
+bool step_data_is_available(){
+    return HealthServiceAccessibilityMaskAvailable &
+      health_service_metric_accessible(HealthMetricStepCount,
+        time_start_of_today(), time(NULL));
+      }
+
+
 
 // Todays current step count
 static void get_step_count() {
-    s_step_count = (int)health_service_sum_today(HealthMetricStepCount);
+//  if (!settings.HealthOff) {
+    s_step_count = (int)health_service_sum_today(HealthMetricStepCount);/* code */
+//  }
 }
 
 
@@ -426,21 +431,21 @@ void update_time_area_layer(Layer *l, GContext* ctx7) {
   if (strcmp(settings.FontChoice,"steel") == 0)
   {
   fctx_set_text_em_height(&fctx, time_font, font_size);
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish1");
+//        APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish1");
   }
   else if(strcmp(settings.FontChoice,"opend") == 0)
   {
   fctx_set_text_em_height(&fctx, time_font_opend, font_size);
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "OpenDyslexic1");
+//      APP_LOG(APP_LOG_LEVEL_DEBUG, "OpenDyslexic1");
   }
   else if(strcmp(settings.FontChoice,"cop") == 0)
   {
   fctx_set_text_em_height(&fctx, time_font_copse, font_size);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Copse1");
+//    APP_LOG(APP_LOG_LEVEL_DEBUG, "Copse1");
   }
   else {
   fctx_set_text_em_height(&fctx, time_font, font_size);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish by default1");
+//    APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish by default1");
   }
   //fctx_set_text_em_height(&fctx, FontToDraw, font_size);
   #endif
@@ -483,21 +488,21 @@ void update_time_area_layer(Layer *l, GContext* ctx7) {
   if (strcmp(settings.FontChoice,"steel") == 0)
   {
   fctx_draw_string(&fctx, timedraw, time_font, GTextAlignmentRight, FTextAnchorBottom);
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish2");
+//        APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish2");
   }
   else if(strcmp(settings.FontChoice,"opend") == 0)
   {
   fctx_draw_string(&fctx, timedraw, time_font_opend, GTextAlignmentRight, FTextAnchorBottom);
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "OpenDyslexic2");
+//      APP_LOG(APP_LOG_LEVEL_DEBUG, "OpenDyslexic2");
   }
   else if(strcmp(settings.FontChoice,"cop") == 0)
   {
   fctx_draw_string(&fctx, timedraw, time_font_copse, GTextAlignmentRight, FTextAnchorBottom);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Copse2");
+//    APP_LOG(APP_LOG_LEVEL_DEBUG, "Copse2");
   }
   else {
   fctx_draw_string(&fctx, timedraw, time_font, GTextAlignmentRight, FTextAnchorBottom);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish by default2");
+//    APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish by default2");
   }
   //fctx_draw_string(&fctx, timedraw, FontToDraw, GTextAlignmentRight, FTextAnchorBottom);
   #endif
@@ -560,21 +565,21 @@ void update_date_area_layer(Layer *a, GContext* ctx8){
   if (strcmp(settings.FontChoice,"steel") == 0)
   {
   fctx_set_text_em_height(&fctx, time_font, font_size);
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish3");
+//        APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish3");
   }
   else if(strcmp(settings.FontChoice,"opend") == 0)
   {
   fctx_set_text_em_height(&fctx, time_font_opend, font_size);
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "OpenDyslexic3");
+  //    APP_LOG(APP_LOG_LEVEL_DEBUG, "OpenDyslexic3");
   }
   else if(strcmp(settings.FontChoice,"cop") == 0)
   {
   fctx_set_text_em_height(&fctx, time_font_copse, font_size);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Copse3");
+//    APP_LOG(APP_LOG_LEVEL_DEBUG, "Copse3");
   }
   else {
   fctx_set_text_em_height(&fctx, time_font, font_size);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish by default3");
+//    APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish by default3");
   }
 //  fctx_set_text_em_height(&fctx, FontSelect(time_font, time_font_opend, time_font_copse), font_size);
   #endif
@@ -599,21 +604,21 @@ void update_date_area_layer(Layer *a, GContext* ctx8){
   if (strcmp(settings.FontChoice,"steel") == 0)
   {
   fctx_draw_string(&fctx, daynow, time_font, GTextAlignmentCenter, FTextAnchorBottom);
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish4");
+  //      APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish4");
   }
   else if(strcmp(settings.FontChoice,"opend") == 0)
   {
   fctx_draw_string(&fctx, daynow, time_font_opend, GTextAlignmentCenter, FTextAnchorBottom);
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "OpenDyslexic4");
+  //    APP_LOG(APP_LOG_LEVEL_DEBUG, "OpenDyslexic4");
   }
   else if(strcmp(settings.FontChoice,"cop") == 0)
   {
   fctx_draw_string(&fctx, daynow, time_font_copse, GTextAlignmentCenter, FTextAnchorBottom);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Copse4");
+  //  APP_LOG(APP_LOG_LEVEL_DEBUG, "Copse4");
   }
   else {
   fctx_draw_string(&fctx, daynow, time_font, GTextAlignmentCenter, FTextAnchorBottom);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish by default4");
+  //  APP_LOG(APP_LOG_LEVEL_DEBUG, "Steelfish by default4");
   }
 //  fctx_draw_string(&fctx, daynow, FontSelect(time_font, time_font_opend, time_font_copse), GTextAlignmentCenter, FTextAnchorBottom);
   #endif
@@ -625,28 +630,6 @@ void update_date_area_layer(Layer *a, GContext* ctx8){
 
 
 static void layer_update_proc(Layer * layer, GContext * ctx){
-
- GRect DateRect =
-  //  (0, offsetdate, bounds3.size.w, bounds1.size.h/4);
-   (PBL_IF_ROUND_ELSE(
-      GRect(126-1, 57-10, 48, 20),
-      GRect(110, 53-11, 34, 20)));
-
-   GRect SunsetRect =
-        (PBL_IF_ROUND_ELSE(
-         GRect(99-4,133-8,61,14),
-          GRect(54+2, 151-10, 54,20)));
-
-     GRect SunriseRect =
-        (PBL_IF_ROUND_ELSE(
-          GRect(20+6,133-8,61,14),
-          GRect(0, 151-10, 54,20)));
-
- GRect MoonRect =
-    (PBL_IF_ROUND_ELSE(
-      GRect(90-9,132-5,18,18),
-      GRect(108, 168-20-8, 36,20)));
-
 //add in weather info
   GRect IconNowRect = //weather condition icon
        (PBL_IF_ROUND_ELSE(
@@ -673,19 +656,7 @@ GRect BatteryRect =
     GRect(0,50,180,2),
     GRect(0,45,144,2)));
 
-GRect StepsRect =
-    (PBL_IF_ROUND_ELSE(
-        GRect(0, 156-8, 180, 40),
-        GRect(0, 116+2, 142, 40)));
-   //Date
-  // Local language
-  const char * sys_locale = i18n_get_system_locale();
-  char datedraw[10];
-  fetchwday(s_weekday, sys_locale, datedraw);
-  char datenow[10];
-  snprintf(datenow, sizeof(datenow), "%s", datedraw);
-
-  //Battery
+    //Battery
   int s_battery_level = battery_state_service_peek().charge_percent;
 
   int width_rect = (s_battery_level * 144) / 100;
@@ -700,31 +671,11 @@ GRect StepsRect =
   snprintf(battperc, sizeof(battperc), "%d", s_battery_level);
   strcat(battperc, "%");
 
-//sunsettime variable by clock setting
- char SunsetToDraw[20];
-if (clock_is_24h_style()){
-    snprintf(SunsetToDraw, sizeof(SunsetToDraw), "%s",sunsetstring);
-  }
-else {
-    snprintf(SunsetToDraw, sizeof(SunsetToDraw), "%s",sunsetstring12);
-  }
-
-  char SunriseToDraw[20];
- if (clock_is_24h_style()){
-     snprintf(SunriseToDraw, sizeof(SunriseToDraw), "%s",sunrisestring);
-   }
- else {
-     snprintf(SunriseToDraw, sizeof(SunriseToDraw), "%s",sunrisestring12);
-   }
-
    //   char SunsetToDraw[20];
    //   char SunriseToDraw[20];
    //    snprintf(SunsetToDraw, sizeof(SunsetToDraw), "%s",sunsetstring);
    //    snprintf(SunriseToDraw, sizeof(SunriseToDraw), "%s",sunrisestring);
 //////////////////////////////
-  char MoonToDraw[20];
-  snprintf(MoonToDraw, sizeof(MoonToDraw), "%s",moonstring);
-
 
    char CondToDraw[20];
    char TempToDraw[20];
@@ -732,42 +683,23 @@ else {
    char DirectionToDraw[20];
 
 
-   char StepsToDraw[20];
-   snprintf(StepsToDraw, sizeof(StepsToDraw), "%s",s_current_steps_buffer);
 
 
   if (showForecastWeather)
       {
-   snprintf(CondToDraw, sizeof(CondToDraw), "%s",iconnowstring);
-   snprintf(TempToDraw, sizeof(TempToDraw), "%s",tempstring);
-   snprintf(SpeedToDraw,sizeof(SpeedToDraw),"%s",windstring);
-   snprintf(DirectionToDraw,sizeof(DirectionToDraw),"%s",windiconnowstring);
+   snprintf(CondToDraw, sizeof(CondToDraw), "%s",settings.iconnowstring);
+   snprintf(TempToDraw, sizeof(TempToDraw), "%s",settings.tempstring);
+   snprintf(SpeedToDraw,sizeof(SpeedToDraw),"%s",settings.windstring);
+   snprintf(DirectionToDraw,sizeof(DirectionToDraw),"%s",settings.windiconnowstring);
       }
   else
       {
-  snprintf(CondToDraw, sizeof(CondToDraw), "%s",iconforestring);
-  snprintf(TempToDraw, sizeof(TempToDraw), "%s",temphistring);
-  snprintf(SpeedToDraw,sizeof(SpeedToDraw),"%s",windavestring);
-  snprintf(DirectionToDraw,sizeof(DirectionToDraw),"%s", windiconavestring);
+  snprintf(CondToDraw, sizeof(CondToDraw), "%s",settings.iconforestring);
+  snprintf(TempToDraw, sizeof(TempToDraw), "%s",settings.temphistring);
+  snprintf(SpeedToDraw,sizeof(SpeedToDraw),"%s",settings.windavestring);
+  snprintf(DirectionToDraw,sizeof(DirectionToDraw),"%s", settings.windiconavestring);
       }
 
-  graphics_context_set_text_color(ctx, ColorSelect(settings.Text2Color, settings.Text2ColorN));
-  if (clock_is_24h_style()){
-    graphics_draw_text(ctx, SunsetToDraw, FontSunset, SunsetRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
-    graphics_draw_text(ctx, SunriseToDraw, FontSunset, SunriseRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
-    }
-  else {
-    graphics_draw_text(ctx, SunsetToDraw, FontSunset12, SunsetRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
-    graphics_draw_text(ctx, SunriseToDraw, FontSunset12, SunriseRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
-    }
-  graphics_context_set_text_color(ctx,ColorSelect(settings.Text4Color,settings.Text4ColorN));
-  graphics_draw_text(ctx, MoonToDraw, FontMoonPhase, MoonRect, GTextOverflowModeFill, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
-
-  graphics_context_set_text_color(ctx, ColorSelect(settings.Text3Color, settings.Text3ColorN));
-  graphics_draw_text(ctx, datenow, FontDayOfTheWeekShortName, DateRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
-
-  graphics_context_set_text_color(ctx,ColorSelect(settings.Text1Color,settings.Text1ColorN));
-  graphics_draw_text(ctx, StepsToDraw, FontSunset, StepsRect, GTextOverflowModeFill, PBL_IF_ROUND_ELSE(GTextAlignmentCenter, GTextAlignmentRight), NULL);
 
 
   //Weathericon
@@ -801,6 +733,69 @@ else {
 }
 
 static void layer_update_proc_sunset(Layer * layer2, GContext * ctx2){
+//add in steps, date, sunrise & sunset
+
+  GRect DateRect =
+   //  (0, offsetdate, bounds3.size.w, bounds1.size.h/4);
+    (PBL_IF_ROUND_ELSE(
+       GRect(126-1, 57-10, 48, 20),
+       GRect(110, 53-11, 34, 20)));
+
+ GRect SunsetRect =
+       (PBL_IF_ROUND_ELSE(
+        GRect(99-4,133-8,61,14),
+         GRect(54+2, 151-10, 54,20)));
+
+  GRect SunriseRect =
+       (PBL_IF_ROUND_ELSE(
+         GRect(20+6,133-8,61,14),
+         GRect(0, 151-10, 54,20)));
+
+   GRect MoonRect =
+   (PBL_IF_ROUND_ELSE(
+     GRect(90-9,132-5,18,18),
+     GRect(108, 168-20-8, 36,20)));
+
+   GRect StepsRect =
+         (PBL_IF_ROUND_ELSE(
+             GRect(0, 156-8, 180, 40),
+             GRect(0, 116+2, 142, 40)));
+
+
+   //sunsettime variable by clock setting
+    char SunsetToDraw[20];
+   if (clock_is_24h_style()){
+       snprintf(SunsetToDraw, sizeof(SunsetToDraw), "%s",settings.sunsetstring);
+     }
+   else {
+       snprintf(SunsetToDraw, sizeof(SunsetToDraw), "%s",settings.sunsetstring12);
+     }
+
+     char SunriseToDraw[20];
+    if (clock_is_24h_style()){
+        snprintf(SunriseToDraw, sizeof(SunriseToDraw), "%s",settings.sunrisestring);
+      }
+    else {
+        snprintf(SunriseToDraw, sizeof(SunriseToDraw), "%s",settings.sunrisestring12);
+      }
+
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather data captured at time %d",settings.Weathertimecapture);
+
+
+    char MoonToDraw[20];
+    snprintf(MoonToDraw, sizeof(MoonToDraw), "%s",settings.moonstring);
+
+    char StepsToDraw[20];
+    snprintf(StepsToDraw, sizeof(StepsToDraw), "%s",s_current_steps_buffer);
+
+     //Date
+    // Local language
+    const char * sys_locale = i18n_get_system_locale();
+    char datedraw[10];
+    fetchwday(s_weekday, sys_locale, datedraw);
+    char datenow[10];
+    snprintf(datenow, sizeof(datenow), "%s", datedraw);
+
    GRect SunsetIconRect =
     (PBL_IF_ROUND_ELSE(
       GRect(113,150-3,24,24),
@@ -822,6 +817,24 @@ static void layer_update_proc_sunset(Layer * layer2, GContext * ctx2){
  graphics_context_set_text_color(ctx2, ColorSelect(settings.Text2Color, settings.Text2ColorN));
  graphics_draw_text(ctx2, SunsetIconToShow, FontWeatherIcons, SunsetIconRect, GTextOverflowModeFill,PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
  graphics_draw_text(ctx2, SunriseIconToShow, FontWeatherIcons, SunriseIconRect, GTextOverflowModeFill,PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
+
+ graphics_context_set_text_color(ctx2, ColorSelect(settings.Text2Color, settings.Text2ColorN));
+ if (clock_is_24h_style()){
+   graphics_draw_text(ctx2, SunsetToDraw, FontSunset, SunsetRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
+   graphics_draw_text(ctx2, SunriseToDraw, FontSunset, SunriseRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
+   }
+ else {
+   graphics_draw_text(ctx2, SunsetToDraw, FontSunset12, SunsetRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
+   graphics_draw_text(ctx2, SunriseToDraw, FontSunset12, SunriseRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
+   }
+ graphics_context_set_text_color(ctx2,ColorSelect(settings.Text4Color,settings.Text4ColorN));
+ graphics_draw_text(ctx2, MoonToDraw, FontMoonPhase, MoonRect, GTextOverflowModeFill, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
+
+ graphics_context_set_text_color(ctx2, ColorSelect(settings.Text3Color, settings.Text3ColorN));
+ graphics_draw_text(ctx2, datenow, FontDayOfTheWeekShortName, DateRect, GTextOverflowModeWordWrap, PBL_IF_ROUND_ELSE(GTextAlignmentCenter,GTextAlignmentCenter), NULL);
+
+ graphics_context_set_text_color(ctx2,ColorSelect(settings.Text1Color,settings.Text1ColorN));
+ graphics_draw_text(ctx2, StepsToDraw, FontSunset, StepsRect, GTextOverflowModeFill, PBL_IF_ROUND_ELSE(GTextAlignmentCenter, GTextAlignmentRight), NULL);
 
 }
 
@@ -872,7 +885,8 @@ static void prv_save_settings(){
 static void prv_inbox_received_handler(DictionaryIterator * iter, void * context){
   s_loop = s_loop + 1;
   if (s_loop == 1){
-
+      strcpy(settings.iconnowstring, "\U0000F03e");
+      strcpy(settings.iconforestring, "\U0000F03e");
   }
   //  Colours
 
@@ -1020,34 +1034,43 @@ if (tx10_color_t){
 settings.Text10Color = GColorFromHEX(tx10_color_t-> value -> int32);
 }
 // Weather conditions
-  Tuple * wcond_t = dict_find(iter, MESSAGE_KEY_WeatherCond);
+//Tuple * weather_t = dict_find(iter, MESSAGE_KEY_Weathertime);
+//if (weather_t){
+//  settings.Weathertimecapture = (int) weather_t -> value -> int32;
+//   snprintf(settings.weathertimecapture, sizeof(settings.weathertimecapture), "%s", weather_t -> value -> cstring);
+//  APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather data captured at time %d",settings.Weathertimecapture);
+//}
+//  if (s_countdown == 0 || s_countdown == 5)
+//  {
+/*  Tuple * wcond_t = dict_find(iter, MESSAGE_KEY_WeatherCond);
   if (wcond_t){
-  snprintf(condstring, sizeof(condstring), "%s", wcond_t -> value -> cstring);
-  }
+  snprintf(settings.condstring, sizeof(settings.condstring), "%s", wcond_t -> value -> cstring);
+}*/
 
   Tuple * wtemp_t = dict_find(iter, MESSAGE_KEY_WeatherTemp);
   if (wtemp_t){
-  snprintf(tempstring, sizeof(tempstring), "%s", wtemp_t -> value -> cstring);
+  snprintf(settings.tempstring, sizeof(settings.tempstring), "%s", wtemp_t -> value -> cstring);
   }
   Tuple * wwind_t = dict_find(iter, MESSAGE_KEY_WeatherWind);
   if (wwind_t){
-  snprintf(windstring, sizeof(windstring), "%s", wwind_t -> value -> cstring);
+  snprintf(settings.windstring, sizeof(settings.windstring), "%s", wwind_t -> value -> cstring);
   }
   Tuple * iconwinddirnow_tuple = dict_find(iter, MESSAGE_KEY_WindIconNow);
   if (iconwinddirnow_tuple){
-  snprintf(windiconnowstring,sizeof(windiconnowstring),"%s",wind_direction[(int)iconwinddirnow_tuple->value->int32]);
+  snprintf(settings.windiconnowstring,sizeof(settings.windiconnowstring),"%s",wind_direction[(int)iconwinddirnow_tuple->value->int32]);
       //  snprintf(forecast_result,sizeof(forecast_result),"%s","\U0000F002");
   }
   Tuple * iconnow_tuple = dict_find(iter, MESSAGE_KEY_IconNow);
     //////////Add in icons and forecast hi/lo temp////////////
     if (iconnow_tuple){
-      snprintf(iconnowstring,sizeof(iconnowstring),"%s",weather_conditions[(int)iconnow_tuple->value->int32]);
+      snprintf(settings.iconnowstring,sizeof(settings.iconnowstring),"%s",weather_conditions[(int)iconnow_tuple->value->int32]);
   }
 
   Tuple * wwindave_t = dict_find(iter, MESSAGE_KEY_WindFore);
   if (wwindave_t){
-    snprintf(windavestring, sizeof(windavestring), "%s", wwindave_t -> value -> cstring);
+    snprintf(settings.windavestring, sizeof(settings.windavestring), "%s", wwindave_t -> value -> cstring);
   }
+
     //Hour Sunrise and Sunset
   Tuple * sunrise_t = dict_find(iter, MESSAGE_KEY_HourSunrise);
   if (sunrise_t){
@@ -1060,51 +1083,60 @@ settings.Text10Color = GColorFromHEX(tx10_color_t-> value -> int32);
 
   Tuple * sunset_dt = dict_find(iter, MESSAGE_KEY_WEATHER_SUNSET_KEY);
   if (sunset_dt){
-     snprintf(sunsetstring, sizeof(sunsetstring), "%s", sunset_dt -> value -> cstring);
+     snprintf(settings.sunsetstring, sizeof(settings.sunsetstring), "%s", sunset_dt -> value -> cstring);
   }
    Tuple * sunrise_dt = dict_find(iter, MESSAGE_KEY_WEATHER_SUNRISE_KEY);
   if (sunrise_dt){
-     snprintf(sunrisestring, sizeof(sunrisestring), "%s", sunrise_dt -> value -> cstring);
+     snprintf(settings.sunrisestring, sizeof(settings.sunrisestring), "%s", sunrise_dt -> value -> cstring);
   }
 
   //12hr version of sunset & sunrise
   Tuple * sunset12_dt = dict_find(iter, MESSAGE_KEY_WEATHER_SUNSET_KEY_12H);
   if (sunset12_dt){
-     snprintf(sunsetstring12, sizeof(sunsetstring12), "%s", sunset12_dt -> value -> cstring);
+     snprintf(settings.sunsetstring12, sizeof(settings.sunsetstring12), "%s", sunset12_dt -> value -> cstring);
   }
    Tuple * sunrise12_dt = dict_find(iter, MESSAGE_KEY_WEATHER_SUNRISE_KEY_12H);
   if (sunrise12_dt){
-     snprintf(sunrisestring12, sizeof(sunrisestring12), "%s", sunrise12_dt -> value -> cstring);
+     snprintf(settings.sunrisestring12, sizeof(settings.sunrisestring12), "%s", sunrise12_dt -> value -> cstring);
   }
 
 
   Tuple * iconfore_tuple = dict_find(iter, MESSAGE_KEY_IconFore);
   if (iconfore_tuple){
-    snprintf(iconforestring,sizeof(iconforestring),"%s",weather_conditions[(int)iconfore_tuple->value->int32]);
+    snprintf(settings.iconforestring,sizeof(settings.iconforestring),"%s",weather_conditions[(int)iconfore_tuple->value->int32]);
     //  snprintf(forecast_result,sizeof(forecast_result),"%s","\U0000F002");
   }
 
    Tuple * iconwinddirave_tuple = dict_find(iter, MESSAGE_KEY_WindIconAve);
   if (iconwinddirave_tuple){
-    snprintf(windiconavestring,sizeof(windiconavestring),"%s",wind_direction[(int)iconwinddirave_tuple->value->int32]);
+    snprintf(settings.windiconavestring,sizeof(settings.windiconavestring),"%s",wind_direction[(int)iconwinddirave_tuple->value->int32]);
     //  snprintf(forecast_result,sizeof(forecast_result),"%s","\U0000F002");
   }
 
   Tuple * wforetemp_t = dict_find(iter, MESSAGE_KEY_TempFore);
   if (wforetemp_t){
-    snprintf(temphistring, sizeof(temphistring), "%s", wforetemp_t -> value -> cstring);
+    snprintf(settings.temphistring, sizeof(settings.temphistring), "%s", wforetemp_t -> value -> cstring);
   }
 
   Tuple * wforetemplow_t = dict_find(iter, MESSAGE_KEY_TempForeLow);
   if (wforetemplow_t){
-    snprintf(templowstring, sizeof(templowstring), "%s", wforetemplow_t -> value -> cstring);
+    snprintf(settings.templowstring, sizeof(settings.templowstring), "%s", wforetemplow_t -> value -> cstring);
   }
 
   Tuple * moon_tuple = dict_find(iter, MESSAGE_KEY_MoonPhase);
   if (moon_tuple){
-    snprintf(moonstring,sizeof(moonstring),"%s",moon_phase[(int)moon_tuple->value->int32]);
+    snprintf(settings.moonstring,sizeof(settings.moonstring),"%s",moon_phase[(int)moon_tuple->value->int32]);
     //  snprintf(forecast_result,sizeof(forecast_result),"%s","\U0000F002");
   }
+
+  Tuple * weather_t = dict_find(iter, MESSAGE_KEY_Weathertime);
+  if (weather_t){
+    settings.Weathertimecapture = (int) weather_t -> value -> int32;
+  //   snprintf(settings.weathertimecapture, sizeof(settings.weathertimecapture), "%s", weather_t -> value -> cstring);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather data captured at time %d",settings.Weathertimecapture);
+  }
+//}
+  //  APP_LOG(APP_LOG_LEVEL_DEBUG, "Weather update time is %s", settings.FontChoice);
 
   Tuple * font_tuple = dict_find(iter, MESSAGE_KEY_FontChoice);
   if (font_tuple){
@@ -1126,28 +1158,35 @@ settings.Text10Color = GColorFromHEX(tx10_color_t-> value -> int32);
     if (disntheme_t -> value -> int32 == 0){
       settings.NightTheme = false;
       APP_LOG(APP_LOG_LEVEL_DEBUG, "NTHeme off");
-    } else
+    } else {
     settings.NightTheme = true;
-  }
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "NTHeme on");
+      }
+    }
 
-  /*Tuple * health_t = dict_find(iter, MESSAGE_KEY_HealthOff);
+  Tuple * health_t = dict_find(iter, MESSAGE_KEY_HealthOff);
   if (health_t){
     if (health_t -> value -> int32 == 0){
       settings.HealthOff = false;
       APP_LOG(APP_LOG_LEVEL_DEBUG, "Health on");
-    } else
-    settings.HealthOff = true;
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Health off");
-  }*/
+      get_step_count();
+      display_step_count();
+    } else {
+      settings.HealthOff = true;
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Health off");
+      snprintf(s_current_steps_buffer, sizeof(s_current_steps_buffer),
+       "%s", "");
+    }
+  }
 
-  layer_mark_dirty(s_canvas);
+  layer_mark_dirty(s_canvas_top_section);
   layer_mark_dirty(time_area_layer);
   layer_mark_dirty(date_area_layer);
-  layer_mark_dirty(s_canvas_sunset_icon);
+  layer_mark_dirty(s_canvas_bottom_section);
   layer_mark_dirty(s_canvas_bt_icon);
   layer_mark_dirty(s_canvas_qt_icon);
 
-   prv_save_settings();
+  prv_save_settings();
 }
 
 
@@ -1169,9 +1208,9 @@ static void window_load(Window * window){
      layer_add_child(window_layer, date_area_layer);
      layer_set_update_proc(date_area_layer, update_date_area_layer);
 
-  s_canvas_sunset_icon = layer_create(bounds4);
-    layer_set_update_proc (s_canvas_sunset_icon, layer_update_proc_sunset);
-    layer_add_child(window_layer, s_canvas_sunset_icon);
+  s_canvas_bottom_section = layer_create(bounds4);
+    layer_set_update_proc (s_canvas_bottom_section, layer_update_proc_sunset);
+    layer_add_child(window_layer, s_canvas_bottom_section);
 
   s_canvas_bt_icon = layer_create(bounds4);
     layer_set_update_proc (s_canvas_bt_icon, layer_update_proc_bt);
@@ -1192,19 +1231,19 @@ static void window_load(Window * window){
       layer_add_child(window_layer, text_layer_get_layer(s_step_layer));
 */
 
-  s_canvas = layer_create(bounds4);
-      layer_set_update_proc(s_canvas, layer_update_proc);
-      layer_add_child(window_layer, s_canvas);
+  s_canvas_top_section = layer_create(bounds4);
+      layer_set_update_proc(s_canvas_top_section, layer_update_proc);
+      layer_add_child(window_layer, s_canvas_top_section);
   }
 
 
 static void window_unload(Window * window){
   layer_destroy (s_canvas_background);
   //text_layer_destroy (s_step_layer);
-  layer_destroy(s_canvas);
+  layer_destroy(s_canvas_top_section);
   layer_destroy(time_area_layer);
   layer_destroy(date_area_layer);
-  layer_destroy(s_canvas_sunset_icon);
+  layer_destroy(s_canvas_bottom_section);
   layer_destroy(s_canvas_bt_icon);
   layer_destroy(s_canvas_qt_icon);
   window_destroy(s_window);
@@ -1235,13 +1274,13 @@ void main_window_update(int hours, int minutes, int weekday, int day){
   s_day = day;
   s_weekday = weekday;
 
-  layer_mark_dirty(s_canvas_background);
-  layer_mark_dirty(s_canvas);
-  layer_mark_dirty(time_area_layer);
-  layer_mark_dirty(date_area_layer);
-  layer_mark_dirty(s_canvas_sunset_icon);
-  layer_mark_dirty(s_canvas_bt_icon);
-  layer_mark_dirty(s_canvas_qt_icon);
+//  layer_mark_dirty(s_canvas_background);
+//  layer_mark_dirty(s_canvas);
+//  layer_mark_dirty(time_area_layer);
+//  layer_mark_dirty(date_area_layer);
+  layer_mark_dirty(s_canvas_bottom_section);
+//  layer_mark_dirty(s_canvas_bt_icon);
+//  layer_mark_dirty(s_canvas_qt_icon);
 
 }
 
@@ -1250,7 +1289,7 @@ static void tick_handler(struct tm * time_now, TimeUnits changed){
   main_window_update(time_now -> tm_hour, time_now -> tm_min, time_now -> tm_wday, time_now -> tm_mday);
   //update_time();
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Tick at %d", time_now -> tm_min);
-  s_loop = 0;
+  //s_loop = 0;
   if (s_countdown == 0){
     //Reset
     s_countdown = settings.UpSlider;
@@ -1278,17 +1317,17 @@ static void tick_handler(struct tm * time_now, TimeUnits changed){
     };
     // Change Color of background
     layer_mark_dirty(s_canvas_background);
-    layer_mark_dirty(s_canvas);
+    layer_mark_dirty(s_canvas_top_section);
     layer_mark_dirty(time_area_layer);
     layer_mark_dirty(date_area_layer);
-    layer_mark_dirty(s_canvas_sunset_icon);
+    layer_mark_dirty(s_canvas_bottom_section);
     layer_mark_dirty(s_canvas_bt_icon);
     layer_mark_dirty(s_canvas_qt_icon);
 
   }
   // Get weather update every requested minutes and extra request 5 minutes earlier
   if (s_countdown == 0 || s_countdown == 5){
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Update weather at %d", time_now -> tm_min);
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "countdown is 0, so updated weather at %d", time_now -> tm_min);
       request_watchjs();
   }
   //If GPS was off request weather every 15 minutes
@@ -1308,7 +1347,11 @@ static void init(){
   // Listen for AppMessages
   //Starting loop at 0
   s_loop = 0;
-  s_countdown = settings.UpSlider;
+  //s_countdown = settings.UpSlider;
+  //Clean vars
+
+//  strcpy(settings.windiconnowstring, "\U0000F04B");
+//  strcpy(settings.windiconavestring, "\U0000F04B");
 
   time_t now = time(NULL);
   struct tm *t = localtime(&now);
@@ -1342,9 +1385,12 @@ static void init(){
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 //  battery_callback(battery_state_service_peek());
 
-  if (step_data_is_available())  {
+  if (!settings.HealthOff && step_data_is_available())  {
       health_service_events_subscribe(health_handler,NULL);
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "health is on, and steps data is subscribed");
+//          health_service_events_subscribe(NULL,NULL);
     }
+  //#endif
 
   connection_service_subscribe((ConnectionHandlers){
     .pebble_app_connection_handler = bluetooth_vibe_icon

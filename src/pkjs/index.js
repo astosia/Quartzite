@@ -838,6 +838,8 @@ function locationSuccessDS(pos){
                   var forecast_wind_degds = String(json.daily.data[0].windBearing);
                   var forecast_wind_dir_numds = owm_WindToId[forecast_wind_degds];
                   var forecast_ave_wind_ds = String(windtousewu(windunits,forecast_ave_wind_kph,forecast_ave_wind_mph,forecast_ave_wind_ms,forecast_ave_wind_kts))+windunits;
+                  var auxtimeds =new Date(json.currently.time*1000);
+                  var dstime=auxtimeds.getHours()*100+auxtimeds.getMinutes();
 
                   localStorage.setItem("OKAPI", 1);
                   console.log("OK API");
@@ -859,6 +861,7 @@ function locationSuccessDS(pos){
                   console.log(moonphase);
                   console.log(winddegds);
                   console.log(forecast_wind_degds);
+                  console.log(dstime);
 
     // Assemble dictionary using our keys
     var dictionary = {
@@ -878,6 +881,7 @@ function locationSuccessDS(pos){
       "WindFore": forecast_ave_wind_ds,
       "WindIconNow":winddir_numds,
       "WindIconAve":forecast_wind_dir_numds,
+      "Weathertime":dstime,
       "MoonPhase": moonphase,
 
     };
@@ -986,6 +990,9 @@ function locationSuccessOWM(pos){
     var forecast_wind_deg = String(json.daily[0].wind_deg);
     var forecast_wind_dir_num = owm_WindToId[forecast_wind_deg];
     var forecast_ave_wind_owm = String(windtousewu(windunits,forecast_ave_wind_kph,forecast_ave_wind_mph,forecast_ave_wind_ms,forecast_ave_wind_kts))+windunits;
+    var auxtimeowm =new Date(json.current.dt*1000);
+    var owmtime =auxtimeowm.getHours()*100+auxtimeowm.getMinutes();
+
 
     console.log(condclean);
     console.log(sunsetowm);
@@ -1005,6 +1012,7 @@ function locationSuccessOWM(pos){
     console.log(moonphase);
     console.log(winddeg);
     console.log(forecast_wind_deg);
+    console.log(owmtime);
 
    // var wind = String(windkts + "kts");
     localStorage.setItem("OKAPI", 1);
@@ -1036,6 +1044,7 @@ function locationSuccessOWM(pos){
       "WindFore": forecast_ave_wind_owm,
       "WindIconNow":winddir_num,
       "WindIconAve":forecast_wind_dir_num,
+      "Weathertime":owmtime,
       "MoonPhase": moonphase,
 
     };
