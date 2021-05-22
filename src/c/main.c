@@ -190,6 +190,8 @@ static void prv_default_settings(){
   settings.UpSlider = 30;
   settings.NightTheme = false;
   settings.HealthOff = true;
+  settings.AddZero12h = false;
+  settings.RemoveZero24h = false;
 }
 int HourSunrise=700;
 int HourSunset=2200;
@@ -456,16 +458,27 @@ void update_time_area_layer(Layer *l, GContext* ctx7) {
   int hourdraw;
   char hournow[3];
   if (clock_is_24h_style()){
-    hourdraw=s_hours;
-    snprintf(hournow,sizeof(hournow),"%02d",hourdraw);
+    if (settings.RemoveZero24h) {
+      hourdraw=s_hours;
+      snprintf(hournow,sizeof(hournow),"%d",hourdraw);
+    } else {
+      hourdraw=s_hours;
+      snprintf(hournow,sizeof(hournow),"%02d",hourdraw);
+    }
     }
   else {
     if (s_hours==0 || s_hours==12){
       hourdraw=12;
     }
-    else hourdraw=s_hours%12;
-  snprintf(hournow, sizeof(hournow), "%d", hourdraw);
-
+    else {
+    if (settings.AddZero12h) {
+      hourdraw=s_hours%12;
+    snprintf(hournow, sizeof(hournow), "%02d", hourdraw);
+    } else {
+      hourdraw=s_hours%12;
+    snprintf(hournow, sizeof(hournow), "%d", hourdraw);
+    }
+    }
   }
 
   int mindraw;
@@ -477,7 +490,7 @@ void update_time_area_layer(Layer *l, GContext* ctx7) {
   snprintf(timedraw, sizeof(timedraw), "%s:%s", hournow,minnow);
 
   // draw hours
-  time_pos.x = INT_TO_FIXED(PBL_IF_ROUND_ELSE(125, 108+2) + h_adjust);
+  time_pos.x = INT_TO_FIXED(PBL_IF_ROUND_ELSE(125, 108+3) + h_adjust);
   time_pos.y = INT_TO_FIXED(PBL_IF_ROUND_ELSE(137 , 130)  + v_adjust);
 
   fctx_set_offset(&fctx, time_pos);
@@ -1178,6 +1191,28 @@ settings.Text10Color = GColorFromHEX(tx10_color_t-> value -> int32);
        "%s", "");
     }
   }
+
+  Tuple * addzero12_t = dict_find(iter, MESSAGE_KEY_AddZero12h);
+  if (addzero12_t){
+    if (addzero12_t -> value -> int32 == 0){
+      settings.AddZero12h = false;
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Add Zero 12h off");
+    } else {
+    settings.AddZero12h = true;
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Add Zero 12h on");
+      }
+    }
+
+  Tuple * remzero24_t = dict_find(iter, MESSAGE_KEY_RemoveZero24h);
+  if (remzero24_t){
+    if (remzero24_t -> value -> int32 == 0){
+      settings.RemoveZero24h = false;
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Remove Zero 24h off");
+    } else {
+    settings.RemoveZero24h = true;
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Remove Zero 24h off");
+      }
+    }
 
   layer_mark_dirty(s_canvas_top_section);
   layer_mark_dirty(time_area_layer);

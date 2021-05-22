@@ -93,6 +93,18 @@ module.exports = [
         "size":4
       },
       {
+        "type": "toggle",
+        "messageKey": "AddZero12h",
+        "label": "Add leading zero to 12h time",
+        "defaultValue": false
+      },
+      {
+        "type": "toggle",
+        "messageKey": "RemoveZero24h",
+        "label": "Remove leading zero from 24h time",
+        "defaultValue": false
+      },
+      {
         "type": "color",
         "messageKey": "FrameColor1",
         "defaultValue": "0x000000",

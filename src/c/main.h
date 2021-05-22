@@ -63,5 +63,7 @@ typedef struct ClaySettings {
   int Weathertimecapture;
   bool NightTheme;
   bool HealthOff;
+  bool AddZero12h;
+  bool RemoveZero24h;
 
 } __attribute__((__packed__)) ClaySettings;

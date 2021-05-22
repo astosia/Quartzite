@@ -1099,8 +1099,16 @@ function getinfo() {
     }
   }
   var weatherprov=settings4.WeatherProv;
+
   if (weatherprov=="owm"){
     console.log("Ready from OWM");
+    if(manuallat != null && manuallat != '' && manuallong != null && manuallong != '' ){
+      console.log(manuallat);
+      console.log(manuallong);
+      suncalcinfo();
+      locationSuccessOWM();
+    }
+    else {
     navigator.geolocation.getCurrentPosition(
       suncalcinfo,
       locationError,
@@ -1111,11 +1119,19 @@ function getinfo() {
       locationError,
       {enableHighAccuracy:true,timeout: 15000, maximumAge: 1000}
     );
+    }
   }
   else
     {
     console.log("Ready from DS");
-    navigator.geolocation.getCurrentPosition(
+    if(manuallat != null && manuallat != '' && manuallong != null && manuallong != '' ){
+      console.log(manuallat);
+      console.log(manuallong);
+      suncalcinfo();
+      locationSuccessDS();
+      }
+    else {
+      navigator.geolocation.getCurrentPosition(
       suncalcinfo,
       locationError,
       {enableHighAccuracy:true,timeout: 15000, maximumAge: 1000}
@@ -1125,6 +1141,7 @@ function getinfo() {
       locationError,
       {enableHighAccuracy:true,timeout: 15000, maximumAge: 1000}
     );
+    }
     }
   }
 

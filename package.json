@@ -35,6 +35,8 @@
             "HourSunrise",
             "HourSunset",
             "HealthOff",
+            "AddZero12h",
+            "RemoveZero24h",
             "NameLocation",
             "UpSlider",
             "NightTheme",
@@ -188,5 +190,5 @@
             "watchface": true
         }
     },
-    "version": "1.7.0"
+    "version": "1.8.0"
 }
