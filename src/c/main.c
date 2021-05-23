@@ -455,7 +455,7 @@ void update_time_area_layer(Layer *l, GContext* ctx7) {
   fctx_set_color_bias(&fctx,0);
 
 
-  int hourdraw;
+  /*int hourdraw;
   char hournow[3];
   if (clock_is_24h_style()){
     if (settings.RemoveZero24h) {
@@ -487,7 +487,20 @@ void update_time_area_layer(Layer *l, GContext* ctx7) {
   snprintf(minnow, sizeof(minnow), "%02d", mindraw);
 
   char timedraw[6];
-  snprintf(timedraw, sizeof(timedraw), "%s:%s", hournow,minnow);
+  snprintf(timedraw, sizeof(timedraw), "%s:%s", hournow,minnow);*/
+  time_t temp = time(NULL);
+  struct tm *time_now = localtime(&temp);
+
+  char timedraw[8];
+  if(clock_is_24h_style() && settings.RemoveZero24h){
+      strftime(timedraw, sizeof(timedraw),"%k:%M",time_now);
+  } else if (clock_is_24h_style() && !settings.RemoveZero24h) {
+      strftime(timedraw, sizeof(timedraw),"%H:%M",time_now);
+  } else if (settings.AddZero12h) {
+    strftime(timedraw, sizeof(timedraw),"%I:%M",time_now);
+  } else {
+    strftime(timedraw, sizeof(timedraw),"%l:%M",time_now);
+  }
 
   // draw hours
   time_pos.x = INT_TO_FIXED(PBL_IF_ROUND_ELSE(125, 108+3) + h_adjust);
