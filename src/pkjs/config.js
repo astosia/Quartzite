@@ -173,7 +173,10 @@ module.exports = [
         "label":"Moon Colour",
         "allowGray":true
       },
-      {"type": "section",
+    ]
+  },
+  {
+    "type": "section",
        "items": [
          {
            "type": "heading",
@@ -308,12 +311,10 @@ module.exports = [
           "allowGray":true
         }
        ]
-         }
-       ]
-      },
-      {
-        "type": "section",
-        "items": [
+     },
+  {
+    "type": "section",
+    "items": [
           {
             "type": "heading",
             "defaultValue": "Weather settings"
@@ -357,10 +358,6 @@ module.exports = [
               {
                 "label": "OpenWeatherMap",
                 "value": "owm"
-              },
-              {
-                "label": "DarkSky",
-                "value": "ds"
               }
             ]
           },
@@ -388,29 +385,9 @@ module.exports = [
             "messageKey": "APIKEY_User",
             "defaultValue": "",
             "label": "API Key",
-            "description": "If left blank, the watch will attempt to request an api from your pmkey.xyz.  If you don't have an api key, weather data will not be displayed. Existing DarkSky APIs will work, but you can no longer sign up for a new one. You can still register for a free personal API key for <a href =https://home.openweathermap.org/users/sign_up/>OpenWeatherMap here</a>.",
+            "description": "If you don't have an api key, weather data will not be displayed. You can register for a free personal OneCall 3.0 API key for <a href =https://home.openweathermap.org/users/sign_up/>OpenWeatherMap here</a>. You will need to subscribe to the API but you can limit calls to the free 1000 calls per day tier to avoid being charged",
             "attributes": {
               "placeholder": "Paste your API Key here"
-            }
-          },
-         {
-            "type": "input",
-            "messageKey": "EmailPMKEY",
-            "defaultValue": "",
-            "label": "pmkey.xyz User",
-            "description": "pmkey.xyz is a free service for Pebble users that allows you to safely store all your API keys in a single place. Check it out and sign up at <a href=https://www.pmkey.xyz/>pmkey.xyz</a>.",
-            "attributes": {
-              "placeholder": "eg: jane.smith@pmkey.xyz",
-              "type": "email"
-            }
-          },
-          {
-            "type": "input",
-            "messageKey": "PINPMKEY",
-            "defaultValue": "",
-            "label": "pmkey.xyz PIN",
-            "attributes": {
-              "placeholder": "eg: 12345"
             }
           },
           {
@@ -430,7 +407,7 @@ module.exports = [
           },
           {
           "type": "heading",
-          "defaultValue": "version v1.0",
+          "defaultValue": "version v3.0",
           "size":6
           },
           {
