@@ -53,49 +53,125 @@ Layer * date_area_layer;
 static int s_hours, s_minutes, s_weekday, s_day, s_loop;//, s_countdown;//, s_battery_level;
 
 static char* weather_conditions[] = {
-    "\U0000F07B", // 'unknown': 0,
-    "\U0000F00D", // 'clear': 1,
-    "\U0000F00D", // 'sunny': 2,
-    "\U0000F002", // 'partlycloudy': 3,
-    "\U0000F041", // 'mostlycloudy': 4,
-    "\U0000F00C", // 'mostlysunny': 5,
-    "\U0000F002", // 'partlysunny': 6,
-    "\U0000F013", // 'cloudy': 7,
-    "\U0000F019", // 'rain': 8,
-    "\U0000F01B", // 'snow': 9,
-    "\U0000F01D", // 'tstorms': 10,
-    "\U0000F0b5", // 'sleat': 11,
-    "\U0000F00A", // 'flurries': 12,
-    "\U0000F0b6", // 'hazy': 13,
-    "\U0000F01D", // 'chancetstorms': 14,
-    "\U0000F01B", // 'chancesnow': 15,
-    "\U0000F0b5", // 'chancesleat': 16,
-    "\U0000F008", // 'chancerain': 17,
-    "\U0000F01B", // 'chanceflurries': 18,
-    "\U0000F07B", // 'nt_unknown': 19,
-    "\U0000F02E", // 'nt_clear': 20,
-    "\U0000F02E", // 'nt_sunny': 21,
-    "\U0000F083", // 'nt_partlycloudy': 22,
-    "\U0000F086", // 'nt_mostlycloudy': 23,
-    "\U0000F081", // 'nt_mostlysunny': 24,
-    "\U0000F086", // 'nt_partlysunny': 25,
-    "\U0000F013", // 'nt_cloudy': 26,
-    "\U0000F019", // 'nt_rain': 27,
-    "\U0000F01B", // 'nt_snow': 28,
-    "\U0000F01D", // 'nt_tstorms': 29,
-    "\U0000F0b5", // 'nt_sleat': 30,
-    "\U0000F038", // 'nt_flurries': 31,
-    "\U0000F04A", // 'nt_hazy': 32,
-    "\U0000F01D", // 'nt_chancetstorms': 33,
-    "\U0000F038", // 'nt_chancesnow': 34,
-    "\U0000F0B3", // 'nt_chancesleat': 35,
-    "\U0000F036", // 'nt_chancerain': 36,
-    "\U0000F038", // 'nt_chanceflurries': 37,
-    "\U0000F003", // 'fog': 38,
-    "\U0000F04A", // 'nt_fog': 39,
-    "\U0000F050", // 'strong wind': 40,
-    "\U0000F015", // 'hail': 41,
-    "\U0000F056", // 'tornado': 42,
+  "\U0000F07B", // 'unknown': 0,
+  "\U0000f00e", //thunderstorm with light rain: 1
+  "\U0000f02c", //thunderstorm with light rain: 2
+  "\U0000f010", //thunderstorm with rain: 3
+  "\U0000f02d", //thunderstorm with rain: 4
+  "\U0000f01e", //thunderstorm with heavy rain: 5
+  "\U0000f01e", //thunderstorm with heavy rain: 6
+  "\U0000f005", //light thunderstorm: 7
+  "\U0000f025", //light thunderstorm: 8
+  "\U0000f01e", //thunderstorm: 9
+  "\U0000f01e", //thunderstorm: 10
+  "\U0000f01e", //heavy thunderstorm: 11
+  "\U0000f01e", //heavy thunderstorm: 12
+  "\U0000f01e", //ragged thunderstorm: 13
+  "\U0000f01e", //ragged thunderstorm: 14
+  "\U0000f00e", //thunderstorm with light drizzle: 15
+  "\U0000f02c", //thunderstorm with light drizzle: 16
+  "\U0000f00e", //thunderstorm with drizzle: 17
+  "\U0000f02c", //thunderstorm with drizzle: 18
+  "\U0000f01d", //thunderstorm with heavy drizzle: 19
+  "\U0000f01d", //thunderstorm with heavy drizzle: 20
+  "\U0000f00b", //light intensity drizzle: 21
+  "\U0000f02b", //light intensity drizzle: 22
+  "\U0000f01c", //drizzle: 23
+  "\U0000f01c", //drizzle: 24
+  "\U0000f01a", //heavy intensity drizzle: 25
+  "\U0000f01a", //heavy intensity drizzle: 26
+  "\U0000f00b", //light intensity drizzle rain: 27
+  "\U0000f02b", //light intensity drizzle rain: 28
+  "\U0000f00b", //drizzle rain: 29
+  "\U0000f029", //drizzle rain: 30
+  "\U0000f019", //heavy intensity drizzle rain: 31
+  "\U0000f019", //heavy intensity drizzle rain: 32
+  "\U0000f01a", //shower rain and drizzle: 33
+  "\U0000f01a", //shower rain and drizzle: 34
+  "\U0000f01a", //heavy shower rain and drizzle: 35
+  "\U0000f01a", //heavy shower rain and drizzle: 36
+  "\U0000f00b", //shower drizzle: 37
+  "\U0000f02b", //shower drizzle: 38
+  "\U0000f01a", //light rain: 39
+  "\U0000f01a", //light rain: 40
+  "\U0000f019", //moderate rain: 41
+  "\U0000f019", //moderate rain: 42
+  "\U0000f019", //heavy intensity rain: 43
+  "\U0000f019 ", //heavy intensity rain: 44
+  "\U0000f019", //very heavy rain: 45
+  "\U0000f019", //very heavy rain: 46
+  "\U0000f018", //extreme rain: 47
+  "\U0000f018", //extreme rain: 48
+  "\U0000f017", //freezing rain: 49
+  "\U0000f017", //freezing rain: 50
+  "\U0000f01a", //light intensity shower rain: 51
+  "\U0000f01a", //light intensity shower rain: 52
+  "\U0000f01a", //shower rain: 53
+  "\U0000f01a", //shower rain: 54
+  "\U0000f01a", //heavy intensity shower rain: 55
+  "\U0000f01a", //heavy intensity shower rain: 56
+  "\U0000f018", //ragged shower rain: 57
+  "\U0000f018", //ragged shower rain: 58
+  "\U0000f00a", //light snow: 59
+  "\U0000f02a", //light snow: 60
+  "\U0000f01b", //Snow: 61
+  "\U0000f01b", //Snow: 62
+  "\U0000f076", //Heavy snow: 63
+  "\U0000f076", //Heavy snow: 64
+  "\U0000f017", //Sleet: 65
+  "\U0000f017", //Sleet: 66
+  "\U0000f0b2", //Light shower sleet: 67
+  "\U0000f0b4", //Light shower sleet: 68
+  "\U0000f0b5", //Shower sleet: 69
+  "\U0000f0b5", //Shower sleet: 70
+  "\U0000f006", //Light rain and snow: 71
+  "\U0000f026", //Light rain and snow: 72
+  "\U0000f017", //Rain and snow: 73
+  "\U0000f017", //Rain and snow: 74
+  "\U0000f00a", //Light shower snow: 75
+  "\U0000f02a", //Light shower snow: 76
+  "\U0000f00a", //Shower snow: 77
+  "\U0000f02a", //Shower snow: 78
+  "\U0000f076", //Heavy shower snow: 79
+  "\U0000f076", //Heavy shower snow: 80
+  "\U0000f003", //mist: 81
+  "\U0000f04a", //mist: 82
+  "\U0000f062", //Smoke: 83
+  "\U0000f062", //Smoke: 84
+  "\U0000f0b6", //Haze: 85
+  "\U0000f023", //Haze: 86
+  "\U0000f082", //sand/ dust whirls: 87
+  "\U0000f082", //sand/ dust whirls: 88
+  "\U0000f014", //fog: 89
+  "\U0000f014", //fog: 90
+  "\U0000f082", //sand: 91
+  "\U0000f082", //sand: 92
+  "\U0000f082", //dust: 93
+  "\U0000f082", //dust: 94
+  "\U0000f0c8", //volcanic ash: 95
+  "\U0000f0c8", //volcanic ash: 96
+  "\U0000f011", //squalls: 97
+  "\U0000f011", //squalls: 98
+  "\U0000f056", //tornado: 99
+  "\U0000f056", //tornado: 100
+  "\U0000f00d", //clear sky: 101
+  "\U0000f02e", //clear sky: 102
+  "\U0000f00c", //few clouds: 11-25%: 103
+  "\U0000f081", //few clouds: 11-25%: 104
+  "\U0000f002", //scattered clouds: 25-50%: 105
+  "\U0000f086", //scattered clouds: 25-50%: 106
+  "\U0000f041", //broken clouds: 51-84%: 107
+  "\U0000f041", //broken clouds: 51-84%: 108
+  "\U0000f013", //overcast clouds: 85-100%: 109
+  "\U0000f013", //overcast clouds: 85-100%: 110
+  "\U0000f056", //tornado: 111
+  "\U0000f01d", //storm-showers: 112
+  "\U0000f073", //hurricane: 113
+  "\U0000f076", //snowflake-cold: 114
+  "\U0000f072", //hot: 115
+  "\U0000f050", //windy: 116
+  "\U0000f015", //hail: 117
+  "\U0000f050", //strong-wind: 118
 };
 
 static char* wind_direction[] = {
